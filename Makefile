@@ -6,7 +6,7 @@ DEFAULT_PATH := $(shell if [ -z $${PYTHON_PREFIX+x} ]; then echo "$${INSTALL_PRE
 %.o : %.cxx
 	g++ --std=c++14 -c $^ -o $@ -Iinclude
 
-test.bin: test/main.o test/eigen.o
+test.bin: test/main.o test/eigen.o test/numeric.o
 	g++ --std=c++14 $^ -o $@ -lgtest -lpthread	
 	
 
