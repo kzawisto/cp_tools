@@ -20,6 +20,10 @@ struct Date {
 	friend bool operator==(Date a, Date b){
 			return (a.year == b.year && a.month == b.month && a.day == b.day);
 	}
+	friend std::ostream & operator<<(std::ostream & o, const Date &b) {
+		o<<b.year<<"-"<<b.month<<"-"<<b.day;
+		return o;
+	}
 };
 
 struct Time {
@@ -34,6 +38,10 @@ struct Time {
 		return
 			(a.hour == b.hour && a.min == b.min && abs(a.sec - b.sec)<1e-8);
 	}
+	friend std::ostream & operator<<(std::ostream & o, const Time &b) {
+		o<<b.hour<<"-"<<b.min<<"-"<<b.sec;
+		return o;
+	}
 };
 
 struct DateTime {
@@ -47,8 +55,7 @@ struct DateTime {
 			return (a.date == b.date) and (a.time == b.time);
 	}
 	friend std::ostream & operator<<(std::ostream & o, const DateTime &b) {
-		o<<b.date.year<<"-"<<b.date.month<<"-"<<b.date.day<<" "
-				<< b.time.hour<<":"<<b.time.min<<":"<<b.time.sec;
+		o << b.date << " " << b.time;
 		return o;
 	}
 };
@@ -88,7 +95,7 @@ struct TimeToEpochConverter {
 		for(int j =1; j <= 12;++j) {
 
 
-		long double epoch = to_time_t(build_local_time(gr::date(year,j,1),
+		long double epoch = pt::to_time_t(build_local_time(gr::date(year,j,1),
 						 pt::time_duration(0,0,0), tz).utc_time());
 			cache.push_back(MonthId {
 				epoch, DateTime{Date{year, j, 1},Time{0,0,0}}});
