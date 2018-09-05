@@ -86,6 +86,7 @@ lt::local_date_time build_local_time(
 	return lt::local_date_time(dt,
 						 time, tz, lt::local_date_time::check_dst(dt, time, tz));
 }
+
 struct TimeToEpochConverter {
 	std::vector<MonthId> key_frames;
 	boost::shared_ptr< boost::local_time::posix_time_zone > tz;
