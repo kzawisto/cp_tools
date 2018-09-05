@@ -42,7 +42,7 @@ struct DateTime {
 			return (a.date < b.date) or (a.date == b.date && a.time < b.time);
 	}
 	friend bool operator==(const DateTime & a, const DateTime & b){
-			return (a.date == b.date) or (a.time == b.time);
+			return (a.date == b.date) and (a.time == b.time);
 	}
 	friend std::ostream & operator<<(std::ostream & o, const DateTime &b) {
 		o<<b.date.year<<"-"<<b.date.month<<"-"<<b.date.day<<" "
@@ -50,7 +50,7 @@ struct DateTime {
 		return o;
 	}
 };
-DateTime ptime_to_date_time(pt::ptime t) {
+DateTime date_time_from_ptime(pt::ptime t) {
 		DateTime dt;
 		dt.date.day = t.date().day();
 		dt.date.month = t.date().month();
@@ -93,19 +93,20 @@ struct TimeToEpochConverter {
 	}
 	std::vector<MonthId> get_dst_frames(int year) {
 			auto start_dst_local_time = tz->dst_local_start_time(year) + tz->dst_offset();
-			start_dst_local_time = lt::local_date_time(
+			auto start_dst_utc_time =
+				lt::local_date_time(
 					start_dst_local_time.date(), start_dst_local_time.time_of_day(),
 					tz, true
 			).utc_time();
 			auto end_dst_local_time = tz->dst_local_end_time(year);
-			end_dst_local_time = lt::local_date_time(
+			auto end_dst_utc_time = lt::local_date_time(
 					end_dst_local_time.date(), end_dst_local_time.time_of_day(),
 					tz, false
 			).utc_time();
 
 			return std::vector<MonthId>{
-				MonthId{ to_time_t(start_dst_local_time), ptime_to_date_time(start_dst_local_time)},
-				MonthId{ to_time_t(end_dst_local_time), ptime_to_date_time(end_dst_local_time)}
+				MonthId{ to_time_t(start_dst_utc_time), date_time_from_ptime(start_dst_local_time)},
+				MonthId{ to_time_t(end_dst_utc_time), date_time_from_ptime(end_dst_local_time)}
 			};
 	}
 	std::vector<MonthId> get_frames_per_year(int year) {
@@ -143,10 +144,11 @@ struct TimeToEpochConverter {
 		remainder -= int(remainder / (3600* 24)) * 3600 * 24;
 
 		result.time.hour += (int)(remainder / 3600);
+
 		if(result.time.hour >= 24) {
 			// HACK it is not a problem as DST is never on last day of month
 			result.date.day++;
-			result.time.hour += 1;
+			result.time.hour -=24;
 		}
 		remainder -= int(remainder / 3600) * 3600;
 		result.time.min += (int)(remainder / 60);
