@@ -21,6 +21,7 @@ struct Date {
 			return (a.year == b.year && a.month == b.month && a.day == b.day);
 	}
 };
+
 struct Time {
 	int hour, min;
 	double sec;
@@ -34,6 +35,7 @@ struct Time {
 			(a.hour == b.hour && a.min == b.min && abs(a.sec - b.sec)<1e-8);
 	}
 };
+
 struct DateTime {
 	Date date; Time time;
 
@@ -50,6 +52,7 @@ struct DateTime {
 		return o;
 	}
 };
+
 DateTime date_time_from_ptime(pt::ptime t) {
 		DateTime dt;
 		dt.date.day = t.date().day();
@@ -68,6 +71,7 @@ struct MonthId {
 		return a.epoch < b.epoch;
 	}
 };
+
 lt::local_date_time build_local_time(
 		gr::date dt, pt::time_duration time,
 	boost::shared_ptr< boost::local_time::posix_time_zone > tz
