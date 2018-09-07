@@ -2,6 +2,8 @@
 
 #include<deque>
 #include<type_traits>
+#include<vector>
+#include<stdexcept>
 namespace cp_tools {
 inline
 double get_mean(const std::vector<double> & array) {

@@ -27,6 +27,13 @@ PropTree ptree_from_json(std::string json) {
 	return tree;
 }
 
+inline
+std::string json_from_ptree(const PropTree & tree) {
+	std::stringstream ss;
+	ptr::write_json(ss, tree);
+	return ss.str();
+}
+
 
 inline
 std::vector<std::string> split_str(std::string text, std::string char_separators) {

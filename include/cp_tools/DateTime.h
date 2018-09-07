@@ -59,7 +59,7 @@ struct DateTime {
 		return o;
 	}
 };
-
+inline
 DateTime date_time_from_ptime(pt::ptime t) {
 		DateTime dt;
 		dt.date.day = t.date().day();
@@ -79,6 +79,7 @@ struct MonthId {
 	}
 };
 
+inline
 lt::local_date_time build_local_time(
 		gr::date dt, pt::time_duration time,
 	boost::shared_ptr< boost::local_time::posix_time_zone > tz
