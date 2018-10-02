@@ -110,13 +110,13 @@ public:
 			double new_mean = (mean_var.count * mean_var.mean - a) / (mean_var.count - (T)1.0);
 			double new_variance = ((mean_var.count - T(1)) * mean_var.variance -  (a - new_mean) * (a - mean_var.mean)
 					) / (mean_var.count - (T)2) ;
-			return MeanAndVariance<double> {new_mean, new_variance, mean_var.count-1};
+			return MeanAndVariance<T> {new_mean, new_variance, mean_var.count-1};
 		}
 
 
 	}
-	MeanAndVariance<double> with_added_value(double a) const {
-		MeanAndVariance<double> new_mean_var{mean_var};
+	MeanAndVariance<T> with_added_value(T a) const {
+		MeanAndVariance<T> new_mean_var{mean_var};
 		new_mean_var.mean = mean_var.mean + (a - mean_var.mean) / (mean_var.count + (T)1);
 		new_mean_var.variance = mean_var.variance + (
 				(a - mean_var.mean) * (a - new_mean_var.mean) - mean_var.variance
