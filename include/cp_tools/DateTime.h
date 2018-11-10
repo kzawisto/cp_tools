@@ -19,6 +19,9 @@ struct Date {
   friend bool operator==(Date a, Date b) {
     return (a.year == b.year && a.month == b.month && a.day == b.day);
   }
+  friend bool operator<=(Date a, Date b) {
+    return  a == b or a < b;
+  }
   friend std::ostream &operator<<(std::ostream &o, const Date &b) {
     o << b.year << "-" << b.month << "-" << b.day;
     return o;
@@ -36,6 +39,9 @@ struct Time {
   friend bool operator==(Time a, Time b) {
     return (a.hour == b.hour && a.min == b.min && abs(a.sec - b.sec) < 1e-8);
   }
+  friend bool operator<=(Time a, Time b) {
+    return  a == b or a < b;
+  }
   friend std::ostream &operator<<(std::ostream &o, const Time &b) {
     o << b.hour << "-" << b.min << "-" << b.sec;
     return o;
@@ -51,6 +57,9 @@ struct DateTime {
   }
   friend bool operator==(const DateTime &a, const DateTime &b) {
     return (a.date == b.date) and (a.time == b.time);
+  }
+  friend bool operator<=(DateTime a, DateTime b) {
+    return  a == b or a < b;
   }
   friend std::ostream &operator<<(std::ostream &o, const DateTime &b) {
     o << b.date << " " << b.time;
