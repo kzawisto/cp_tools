@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <type_traits>
 #include <vector>
+#include <iostream>
 namespace cp_tools {
 inline double get_mean(const std::vector<double> &array) {
   double sum = 0;
@@ -30,7 +31,7 @@ auto get_mean(T begin, T end) -> deref_t<decltype(*begin)> {
 
 template <typename T> struct MeanAndVariance {
   T mean = T(0), variance = T(0);
-  int count = T(0);
+  long count = 0;
 };
 
 template <typename T>
@@ -119,4 +120,26 @@ public:
     return new_mean_var;
   }
 };
+
+template<typename T>
+T sq(T val) { return val * val; }
+
+template <typename T>
+std::ostream & operator<<(std::ostream & op, MeanAndVariance<T> mv) {
+	op<<"{mean="<<mv.mean<<", var="<<mv.variance<<", count=" << mv.count<<"}";
+	return op;
+}
+
+template<typename T>
+MeanAndVariance<T> combine_variance(MeanAndVariance<T> one, MeanAndVariance<T> another) {
+	long count_total = (another.count + one.count);
+	double mean_new = (one.mean * one.count + another.mean * another.count) / count_total;
+	double variance_new = ((one.count-1) * one.variance + one.count*sq(one.mean - mean_new) +
+
+			(another.count-1) * another.variance + another.count * sq(another.mean - mean_new)) / (count_total-1);
+	return MeanAndVariance<T>{
+		.mean = mean_new, .variance = variance_new, .count = count_total
+	};
+}
+
 }

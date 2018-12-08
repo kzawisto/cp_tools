@@ -15,7 +15,7 @@ perf_test.bin : perftest/test_perf.o
 %.o : %.cxx $(shell find include -type f -name "*.h")
 	g++ --std=c++14 -g -c $< -o $@ -Iinclude
 
-test.bin: test/main.o test/eigen.o test/numeric.o test/test_time.o test/test_algo.o
+test.bin: test/main.o test/eigen.o test/numeric.o test/test_time.o test/test_algo.o test/test_combined_variance.o
 	g++ --std=c++14 $^ -o $@ -lgtest -lpthread	
 	
 
